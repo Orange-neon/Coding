@@ -1,0 +1,55 @@
+#include <iostream>
+#include <cmath>
+using namespace std;
+int ifprm(int a) {
+  if (a==2) {
+    return 0;
+  }
+  else {
+    for (int w=2; w<=sqrt(a); w++) {
+      if (a%w==0) {
+        return 0;
+      }
+    }
+    return a;
+  }
+}
+
+int ifbcl(int a) {
+  if (a%4==1 && a%100!=0) {
+    return a;
+  }
+  else {
+    return 0;
+  }
+}
+
+int ifmdn(int a, bool prmstate) {
+  if (!(prmstate)) {
+    if (a%3==0 || a%11==0 || a%5==0 || a%7==0 || a%13==0 || a%17==0 || a%19==0) {
+      return 0;
+    }
+    return a;
+  }
+  return 0;
+}
+
+int main() {
+  int n;
+  cin>>n;
+  int prm=0;
+  int bcl=0;
+  int mdn=0;
+  for (int q=0; q<n; q++) {
+    int y;
+    cin>>y;
+    bool prmstate=false;
+    if (y==ifprm(y)) {
+      prm+=y;
+      prmstate=true;
+    }
+    bcl+=ifbcl(y);
+    mdn+=ifmdn(y, prmstate);
+  }
+  cout<<prm<<endl<<bcl<<endl<<mdn<<endl;
+}
