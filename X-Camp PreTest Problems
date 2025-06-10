@@ -1,0 +1,707 @@
+X- Camp problems:
+1.
+x=int(input())
+y=int(input())
+print(x%y)
+______________________________________________________________________________________________________________________________________________________________________________________________
+2.
+n,m=map(int, input().split())
+x=[]
+if n%2==0:
+  for q in range(n,m+1,2):
+    x.append(q)
+else:
+  for q in range(n+1,m+1,2):
+    x.append(q)
+print(*x)
+______________________________________________________________________________________________________________________________________________________________________________________________
+3.
+x=int(input())
+y=[]
+for q in range(2,x):
+  flag=0
+  for w in range(2,q):
+    if q%w==0:
+      flag=1
+      break
+  if flag==0:
+    y.append(q)
+print(*y)
+______________________________________________________________________________________________________________________________________________________________________________________________
+4.
+x=input()
+def find_index_of(a):
+  if a=='a':
+    return 1
+  elif a=='b':
+    return 2
+  elif a=='c':
+    return 3
+  elif a=='d':
+    return 4
+  elif a=='e':
+    return 5
+  elif a=='f':
+    return 6
+  elif a=='g':
+    return 7
+  elif a=='h':
+    return 8
+  elif a=='i':
+    return 9
+  elif a=='j':
+    return 10
+  elif a=='k':
+    return 11
+  elif a=='l':
+    return 12
+  elif a=='m':
+    return 13
+  elif a=='n':
+    return 14
+  elif a=='o':
+    return 15
+  elif a=='p':
+    return 16
+  elif a=='q':
+    return 17
+  elif a=='r':
+    return 18
+  elif a=='s':
+    return 19
+  elif a=='t':
+    return 20
+  elif a=='u':
+    return 21
+  elif a=='v':
+    return 22
+  elif a=='w':
+    return 23
+  elif a=='x':
+    return 24
+  elif a=='y':
+    return 25
+  elif a=='z':
+    return 26
+
+chars=[]
+for q in range(26):
+  chars.append(0)
+for q in range(len(x)-1):
+  y=find_index_of(x[q])-1
+  chars[y]+=1
+print(*chars)
+______________________________________________________________________________________________________________________________________________________________________________________________
+5.
+x=list(map(int, input().split()))
+even=[]
+odd=[]
+for q in x:
+  if q%2==0:
+    even.append(q)
+  else:
+    odd.append(q)
+odd.sort()
+odds=[]
+for e in range(len(odd),0,-1):
+  odds.append(odd[e-1])
+even.sort()
+print(*(odds+even))
+______________________________________________________________________________________________________________________________________________________________________________________________
+6.
+n,m=map(int, input().split())
+bigmh=[]
+bigmv=[]
+for q in range(n):
+  littlem=list(map(int, input().split()))
+  bigmh.append(littlem)
+for e in range(m):
+  littlemv=[]
+  for w in bigmh:
+    littlemv.append(w[e])
+  bigmv.append(littlemv)
+counter=0
+for r in bigmh:
+  for x in range(len(r)-1):
+    if r[x]==r[x+1]:
+      counter+=1
+for r in bigmv:
+  for x in range(len(r)-1):
+    if r[x]==r[x+1]:
+      counter+=1
+print(counter)
+______________________________________________________________________________________________________________________________________________________________________________________________
+7.
+n=int(input())
+prev=1
+curr=1
+nex=0
+for q in range(n-1):
+  nex=(prev+curr)%1000000007
+  prev=(curr)%1000000007
+  curr=(nex)%1000000007
+print(curr)
+______________________________________________________________________________________________________________________________________________________________________________________________
+8.
+x,y=map(int, input().split())
+def getfctrl(x):
+  product=1
+  for q in range(1,x+1):
+    product*=q
+  return product
+top=getfctrl(x+y)
+bottom=getfctrl(x)*getfctrl(y)
+print(top//bottom)
+______________________________________________________________________________________________________________________________________________________________________________________________
+9.
+x=int(input())
+def one2(tpole,opole,cpole):
+  rtn=[f"{cpole}->{opole}", f"{cpole}->{tpole}", f"{opole}->{tpole}"]
+  return rtn
+def one23(tp,op,cp):
+  rtn=one2(op,tp,cp)+[f"{cp}->{tp}"]+one2(tp,cp,op)
+  return rtn
+def one234(tp,op,cp):
+  rtn=one23(op,tp,cp)+[f"{cp}->{tp}"]+one23(tp,cp,op)
+  return rtn
+def one2345(tp,op,cp):
+  rtn=one234(op,tp,cp)+[f"{cp}->{tp}"]+one234(tp,cp,op)
+  return rtn
+def one23456(tp,op,cp):
+  rtn=one2345(op,tp,cp)+[f"{cp}->{tp}"]+one2345(tp,cp,op)
+  return rtn
+def one234567(tp,op,cp):
+  rtn=one23456(op,tp,cp)+[f"{cp}->{tp}"]+one23456(tp,cp,op)
+  return rtn
+def one2345678(tp,op,cp):
+  rtn=one234567(op,tp,cp)+[f"{cp}->{tp}"]+one234567(tp,cp,op)
+  return rtn
+def one23456789(tp,op,cp):
+  rtn=one2345678(op,tp,cp)+[f"{cp}->{tp}"]+one2345678(tp,cp,op)
+  return rtn
+def one2345678910(tp,op,cp):
+  rtn=one23456789(op,tp,cp)+[f"{cp}->{tp}"]+one23456789(tp,cp,op)
+  return rtn
+a='A'
+b='B'
+c='C'
+if x==1:
+  print('A->B')
+elif x==2:
+  for q in one2(b,c,a):
+    print(q)
+elif x==3:
+  for q in one23(b,c,a):
+    print(q)
+elif x==4:
+  for q in one234(b,c,a):
+    print(q)
+elif x==5:
+  for q in one2345(b,c,a):
+    print(q)
+elif x==6:
+  for q in one23456(b,c,a):
+    print(q)
+elif x==7:
+  for q in one234567(b,c,a):
+    print(q)
+elif x==8:
+  for q in one2345678(b,c,a):
+    print(q)
+elif x==9:
+  for q in one23456789(b,c,a):
+    print(q)
+elif x==10:
+  for q in one2345678910(b,c,a):
+    print(q)
+______________________________________________________________________________________________________________________________________________________________________________________________
+10. (TLE, 80pts)
+n,k=map(int, input().split())
+def div2many(x):
+  counter=0
+  while x>1:
+    x//=2
+    counter+=1
+  return counter
+def tobasetwo(x,n): #for binary choice
+  rtnval=[]
+  totalpow=int(div2many(x))
+  for q in range(n):
+    rtnval.append(0)
+  if x!=0:
+    rtnval[n-totalpow-1]=1
+    x-=2**totalpow
+    for e in range(totalpow):
+      currpow=0
+      if x!=0:
+        currpow=div2many(x)
+        rtnval[n-div2many(x)-1]=1
+        x-=2**div2many(x)      
+  return rtnval
+    
+x=list(map(int, input().split()))
+x.sort()
+curr_sum=0
+sumtip=len(x)-1
+for q in range(len(x)):
+  curr_sum+=x[q]
+  if curr_sum>k:
+    sumtip=q
+  if x[q]>k:
+    x.pop(q)
+  elif x[q]==k:
+    print('Yes')
+    break
+if sum(x)<k:
+  print('No')
+elif sum(x)==k:
+  print('Yes')
+else:
+  flag=0
+  all_sum=[]
+  for t in range(sumtip+1, 2**len(x)):
+    bnarychc=tobasetwo(t,len(x))
+    tempsum=0
+    for e in range(len(x)):
+      tempsum+=bnarychc[e]*x[e]
+    all_sum.append(tempsum)
+  for y in all_sum:
+    if y==k:
+      flag=1
+      break
+  if flag==1:
+    print('Yes')
+  else:
+    print('No')
+______________________________________________________________________________________________________________________________________________________________________________________________
+11.
+w,h=map(int, input().split())
+bigh=[]
+bigv=[]
+for q in range(h):
+  little=input()
+  bigh.append(little)#getting input horizontally, good
+for e in range(w):
+  littlev=''
+  for r in bigh:
+    littlev+=r[e]
+  bigv.append(littlev)#getting input vertically, good
+strt=[]
+for line in range(len(bigh)):
+  for char in range(len(bigh[line])):
+    if bigh[line][char]=='@':
+      strt.append(char)
+      strt.append(line)#finding @--start point (sample: 1,7), good
+pts=[]
+stpt=strt[0]*100+strt[1]
+pts.append(stpt)
+t=0
+while t<len(pts):
+  if pts[t]//100!=0 and pts[t]//100!=w-1 and pts[t]%100!=0 and pts[t]%100!=h-1:
+    if pts[t]+1 not in pts and bigh[(pts[t]+1)%100][(pts[t]+1)//100]!='#':
+      pts.append(pts[t]+1)
+    if pts[t]-1 not in pts and bigh[(pts[t]-1)%100][(pts[t]-1)//100]!='#':
+      pts.append(pts[t]-1)
+    if pts[t]+100 not in pts and bigh[(pts[t]+100)%100][(pts[t]+100)//100]!='#':
+      pts.append(pts[t]+100)
+    if pts[t]-100 not in pts and bigh[(pts[t]-100)%100][(pts[t]-100)//100]!='#':
+      pts.append(pts[t]-100)
+  elif pts[t]//100!=0 and pts[t]//100!=w-1 and pts[t]%100!=0 and pts[t]%100==h-1:
+    if pts[t]-1 not in pts and bigh[(pts[t]-1)%100][(pts[t]-1)//100]!='#':
+      pts.append(pts[t]-1)
+    if pts[t]+100 not in pts and bigh[(pts[t]+100)%100][(pts[t]+100)//100]!='#':
+      pts.append(pts[t]+100)
+    if pts[t]-100 not in pts and bigh[(pts[t]-100)%100][(pts[t]-100)//100]!='#':
+      pts.append(pts[t]-100)
+  elif pts[t]//100!=0 and pts[t]//100!=w-1 and pts[t]%100==0 and pts[t]%100!=h-1:
+    if pts[t]+1 not in pts and bigh[(pts[t]+1)%100][(pts[t]+1)//100]!='#':
+      pts.append(pts[t]+1)
+    if pts[t]+100 not in pts and bigh[(pts[t]+100)%100][(pts[t]+100)//100]!='#':
+      pts.append(pts[t]+100)
+    if pts[t]-100 not in pts and bigh[(pts[t]-100)%100][(pts[t]-100)//100]!='#':
+      pts.append(pts[t]-100)
+  elif pts[t]//100!=0 and pts[t]//100==w-1 and pts[t]%100!=0 and pts[t]%100!=h-1:
+    if pts[t]+1 not in pts and bigh[(pts[t]+1)%100][(pts[t]+1)//100]!='#':
+      pts.append(pts[t]+1)
+    if pts[t]-1 not in pts and bigh[(pts[t]-1)%100][(pts[t]-1)//100]!='#':
+      pts.append(pts[t]-1)
+    if pts[t]-100 not in pts and bigh[(pts[t]-100)%100][(pts[t]-100)//100]!='#':
+      pts.append(pts[t]-100)
+  elif pts[t]//100==0 and pts[t]//100!=w-1 and pts[t]%100!=0 and pts[t]%100!=h-1:
+    if pts[t]+1 not in pts and bigh[(pts[t]+1)%100][(pts[t]+1)//100]!='#':
+      pts.append(pts[t]+1)
+    if pts[t]-1 not in pts and bigh[(pts[t]-1)%100][(pts[t]-1)//100]!='#':
+      pts.append(pts[t]-1)
+    if pts[t]+100 not in pts and bigh[(pts[t]+100)%100][(pts[t]+100)//100]!='#':
+      pts.append(pts[t]+100)
+  elif pts[t]//100!=0 and pts[t]//100==w-1 and pts[t]%100!=0 and pts[t]%100==h-1:
+    if pts[t]-1 not in pts and bigh[(pts[t]-1)%100][(pts[t]-1)//100]!='#':
+      pts.append(pts[t]-1)
+    if pts[t]-100 not in pts and bigh[(pts[t]-100)%100][(pts[t]-100)//100]!='#':
+      pts.append(pts[t]-100)
+  elif pts[t]//100==0 and pts[t]//100!=w-1 and pts[t]%100!=0 and pts[t]%100==h-1:
+    if pts[t]-1 not in pts and bigh[(pts[t]-1)%100][(pts[t]-1)//100]!='#':
+      pts.append(pts[t]-1)
+    if pts[t]+100 not in pts and bigh[(pts[t]+100)%100][(pts[t]+100)//100]!='#':
+      pts.append(pts[t]+100)
+  elif pts[t]//100!=0 and pts[t]//100==w-1 and pts[t]%100==0 and pts[t]%100!=h-1:
+    if pts[t]+1 not in pts and bigh[(pts[t]+1)%100][(pts[t]+1)//100]!='#':
+      pts.append(pts[t]+1)
+    if pts[t]-100 not in pts and bigh[(pts[t]-100)%100][(pts[t]-100)//100]!='#':
+      pts.append(pts[t]-100)
+  elif pts[t]//100==0 and pts[t]//100!=w-1 and pts[t]%100==0 and pts[t]%100!=h-1:
+    if pts[t]+1 not in pts and bigh[(pts[t]+1)%100][(pts[t]+1)//100]!='#':
+      pts.append(pts[t]+1)
+    if pts[t]+100 not in pts and bigh[(pts[t]+100)%100][(pts[t]+100)//100]!='#':
+      pts.append(pts[t]+100)
+  t+=1
+print(len(pts))
+______________________________________________________________________________________________________________________________________________________________________________________________
+12.
+x=int(input())
+def finsums(dftsums):
+    rtn=[]
+    for q in dftsums:
+        flag=0
+        for w in range(len(q)-1):
+            if q[w+1]<q[w]:
+                flag=1
+                break
+        if flag==0:
+            rtn.append(q)
+    rtn.sort()
+    return rtn 
+def nextsums(prevsums,nnum):
+  rtn=[]
+  for q in prevsums:
+    if q+[1] not in rtn:
+      rtn.append(q+[1])
+    if [1]+q not in rtn:
+      rtn.append([1]+q)
+    x=list(q)
+    x[len(x)-1]=int(x[len(x)-1])+1
+    if x not in rtn: #+1 to last 
+      rtn.append(x)
+    x=list(q)
+    x[0]=int(x[0])+1
+    if x not in rtn:#+1 to first
+      rtn.append(x)
+  return rtn
+def callit(nnum):
+  rtn=[[1,1]]
+  for q in range(nnum-2):
+    rtn=finsums(nextsums(rtn,nnum))
+  rrtn=[]
+  for w in range(len(rtn)):
+    mrrtn=[f'{nnum}','=']
+    for e in range(len(rtn[w])):
+        mrrtn.append(rtn[w][e])
+        if not(e==len(rtn[w])-1):
+            mrrtn.append('+')
+    rrtn.append(mrrtn)
+  return rrtn
+for q in callit(x):
+  rtn=''
+  for w in q:
+      rtn+=str(w)
+______________________________________________________________________________________________________________________________________________________________________________________________
+13. (TLE, 30pts)
+x=int(input())
+a,b=map(int, input().split())
+x,y=map(int, input().split())
+strt=1000*a+b
+end=1000*x+y
+pts=[[strt]]
+lim=x*1000+x
+counter=0
+for q in pts:
+  mpts=[]
+  for w in q:
+    if w+2001<=lim and w+2001 not in mpts:
+      mpts.append(w+2001)
+    if w+1002<=lim and w+1002 not in mpts:
+      mpts.append(w+1002)
+    if w-998>=0 and w-998 not in mpts:
+      mpts.append(w-998)
+    if w-1999>=0 and w-1999 not in mpts:
+      mpts.append(w-1999)
+    if w-2001>=0 and w-2001 not in mpts:
+      mpts.append(w-2001)
+    if w-1002>=0 and w-1002 not in mpts:
+      mpts.append(w-1002)
+    if w+998<=lim and w+998 not in mpts:
+      mpts.append(w+998)
+    if w+1999<=lim and w+1999 not in mpts:
+      mpts.append(w+1999)
+  pts.append(mpts)
+  counter+=1
+  if end in mpts:
+    print(counter)
+    break
+______________________________________________________________________________________________________________________________________________________________________________________________
+14.
+while True:
+  f=list(map(int, input().split()))
+  if f!=[0]:
+    n=f[0]
+    a=f[1]
+    b=f[2]
+    if int(a)==int(b):
+      x=list(map(int, input().split()))
+      print(0)
+    else:
+      x=list(map(int, input().split()))
+      repeat=[]
+      bfs=[[a-1]]
+      counter=0
+      y=0
+      flag=0
+      for w in bfs:
+        fs=[]
+        for q in w:
+          if q-x[q]>=0 and q-x[q] not in repeat:
+            fs.append(q-x[q])
+          if q+x[q]<n and q+x[q] not in repeat:
+            fs.append(q+x[q])
+          repeat.append(q)
+        counter+=1
+        if fs!=[]:
+          bfs.append(fs)
+        for w in fs:
+          if w==b-1:
+            print(counter)
+            flag=1
+            y=len(x)
+            break
+        if flag==1:
+          break
+      if y!=len(x):
+        h=-1
+        print(h)
+  else:
+    break
+______________________________________________________________________________________________________________________________________________________________________________________________
+15. IN PROGRESS
+n,m=map(int, input().split())
+pts=[]
+def branchpts(currstate, pts, coords, sidel, ptsreached):#get branch points
+  x=coords[0]
+  y=coords[1]
+  rtn=[]
+  if x+1<sidel and pts[y][x+1]!=currstate and [x+1,y] not in ptsreached:
+    rtn.append([x+1,y])
+  if x-1>=0 and pts[y][x-1]!=currstate and ([x-1,y] not in ptsreached):
+    rtn.append([x-1,y])
+  if y+1<sidel and pts[y+1][x]!=currstate and ([x,y+1] not in ptsreached):
+    rtn.append([x,y+1])
+  if y-1>=0 and pts[y-1][x]!=currstate and [x,y-1] not in ptsreached:
+    rtn.append([x,y-1])
+  return rtn
+#get input in list , sample would be [[0,1],[1,0]] works
+for q in range(n):
+  xy=input()
+  lpts=[]
+  for yy in range(n):
+    lpts.append(int(xy[yy]))
+  pts.append(lpts)
+for w in range(m):
+  xxxxxx,yyyyyy=map(int, input().split())
+  y=xxxxxx-1
+  x=yyyyyy-1
+  ptsreached=[[x,y]]
+  t=0
+  while t<len(ptsreached):
+    currstate=pts[ptsreached[t][1]][ptsreached[t][0]]
+    xn=ptsreached[t][0]
+    yn=ptsreached[t][1]
+    maybe_new_pts=branchpts(currstate, pts, [xn,yn], n, ptsreached)
+    if maybe_new_pts!=[]:
+      ptsreached+=maybe_new_pts
+    t+=1
+  print(len(ptsreached))
+______________________________________________________________________________________________________________________________________________________________________________________________
+ 
+16. (TLE, 27pts, DRAFT CODE, has extra prints, something still wrong)
+n,k=map(int, input().split())
+def div2many(x):
+  counter=0
+  while x>1:
+    x//=2
+    counter+=1
+  return counter
+def tobasetwo(x,n): #for binary choice
+  rtnval=[]
+  totalpow=int(div2many(x))
+  if x!=0:
+    rtnval.append(n-totalpow-1)
+    x-=2**totalpow
+    for e in range(totalpow):
+      currpow=0
+      if x!=0:
+        currpow=div2many(x)
+        rtnval.append(n-div2many(x)-1)
+        x-=2**div2many(x)
+      else:
+        break
+  return rtnval
+def find_num_subarray(x,n,k,sumtip):
+  all_works=[]
+  if k!=0:
+    for t in range(2**sumtip, 2**n):
+      bnarychc=tobasetwo(t,n)#2 would be [3] in a 5 list, 0 0 0 1 0
+      tempsum=0
+      for e in bnarychc:
+        tempsum+=x[e]
+      if tempsum==k:
+        all_works.append(bnarychc)
+  else:
+      f=-1
+      all_works.append(f)
+  return all_works
+flagg=0
+xy=list(map(int, input().split()))
+xyz=list(xy)
+smalls=[]
+bigs=[]
+for q in range(n):
+  if xy[q]>k:
+    xyz.remove(xy[q])
+xyz.sort()
+x=[]
+n=len(xyz)
+currs=0
+sumtip=0
+for p in range(n):
+  currs+=xyz[p]
+  if currs>=k:
+    sumtip=p
+    break
+for u in range(n-1,-1,-1):
+  x.append(xyz[u])
+  if xyz[u]<=k//2:
+    smalls.append(xyz[u])
+  else:
+    bigs.append(xyz[u])
+if sum(x)<k:
+  print(0)
+elif sum(x)==k:
+  print(1)
+else:
+  counter=[]
+  counter+=find_num_subarray(smalls,len(smalls),k,sumtip)
+  currs=0
+  for i in bigs:
+    j=k-i
+    for a in range(n):
+      currs+=xyz[p]
+      if currs>=j:
+        sumtip=a
+        breakn,k=map(int, input().split())
+def div2many(x):
+  counter=0
+  while x>1:
+    x//=2
+    counter+=1
+  return counter
+def tobasetwo(x,n): #for binary choice
+  rtnval=[]
+  totalpow=int(div2many(x))
+  if x!=0:
+    rtnval.append(n-totalpow-1)
+    x-=2**totalpow
+    for e in range(totalpow):
+      currpow=0
+      if x!=0:
+        currpow=div2many(x)
+        rtnval.append(n-div2many(x)-1)
+        x-=2**div2many(x)
+      else:
+        break
+  return rtnval
+def find_num_subarray(x,n,k,sumtip):
+  all_works=[]
+  if k!=0:
+    for t in range(2**sumtip, 2**n):
+      bnarychc=tobasetwo(t,n)#2 would be [3] in a 5 list, 0 0 0 1 0
+      tempsum=0
+      for e in bnarychc:
+        tempsum+=x[e]
+      if tempsum==k:
+        all_works.append(bnarychc)
+  else:
+      f=-1
+      all_works.append(f)
+  return all_works
+flagg=0
+xy=list(map(int, input().split()))
+xyz=list(xy)
+smalls=[]
+bigs=[]
+for q in range(n):
+  if xy[q]>k:
+    xyz.remove(xy[q])
+xyz.sort()
+x=[]
+n=len(xyz)
+currs=0
+sumtip=0
+for p in range(n):
+  currs+=xyz[p]
+  if currs>=k:
+    sumtip=p
+    break
+for u in range(n-1,-1,-1):
+  x.append(xyz[u])
+  if xyz[u]<=k//2:
+    smalls.append(xyz[u])
+  else:
+    bigs.append(xyz[u])
+if sum(x)<k:
+  print(0)
+elif sum(x)==k:
+  print(1)
+else:
+  counter=[]
+  counter+=find_num_subarray(smalls,len(smalls),k,sumtip)
+  currs=0
+  for i in bigs:
+    j=k-i
+    for a in range(n):
+      currs+=xyz[p]
+      if currs>=j:
+        sumtip=a
+        break
+    counter+=find_num_subarray(smalls,len(smalls),j,sumtip)
+  fnval=[]
+  print(len(counter))
+    counter+=find_num_subarray(smalls,len(smalls),j,sumtip)
+  fnval=[]
+  print(len(counter))
+______________________________________________________________________________________________________________________________________________________________________________________________
+17.
+n,k=map(int, input().split())
+logs=[]
+sumlog=0
+def reducelog(logpc):
+  logpc-=1
+  nlogs=0
+  for w in logs:
+    nlogs+=w//logpc
+  if nlogs!=k:
+    logpc=reducelog(logpc)
+    return logpc
+  else:
+    return logpc
+for q in range(n):
+  x=int(input())
+  logs.append(x)
+  sumlog+=x
+logpc=sumlog//k
+nlogs=0
+for w in logs:
+  nlogs+=w//logpc
+if nlogs!=k:
+  print(reducelog(logpc))
+else:
+  print(logpc)
+______________________________________________________________________________________________________________________________________________________________________________________________
