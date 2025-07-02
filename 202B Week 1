@@ -1,0 +1,53 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+vector<int> path_lengths;
+vector<char> letters_visited;
+vector<vector<char>> g_maze;
+int g_n, g_m;
+int findpaths(int x, int y, int path_length) {
+  if (x<0 || x>=g_m || y<0 || y>=g_n) {
+    return -1;
+  }
+  for (char letter : letters_visited) {
+    if (letter == g_maze[y][x]) {
+      return -1;
+    }
+  }
+  letters_visited.push_back(g_maze[y][x]);
+  ++path_length;
+  int a = findpaths(x-1,y, path_length);
+  int b = findpaths(x+1,y, path_length);
+  int c = findpaths(x,y-1, path_length);
+  int d = findpaths(x,y+1, path_length);
+  cout<<a<<b<<c<<d<<path_length;
+  return max({a,b,c,d, path_length});
+}
+int main() {
+  ios::sync_with_stdio(0);
+  cin.tie(0);
+  int n, m;
+  cin>>n>>m;
+  g_n=n;
+  g_m=m;
+  vector<vector<char>> maze(n, vector<char>(m, 'A'));
+  for (int q=0; q<n; ++q) {
+    for (int w=0; w<m; ++w) {
+      cin>>maze[q][w];
+    }
+  }
+  g_maze=maze;
+  path_lengths.push_back(findpaths(0,0, 0));
+  cout<<'\n';
+  for (int q : path_lengths) {
+      cout<<q<<' ';
+  }
+  cout<<'\n';
+  if (path_lengths.empty()) {
+      cout<<"uh oh, empty!"<<'\n';
+  }
+  else {
+  cout<<*max_element(path_lengths.begin(), path_lengths.end());
+  }
+}
