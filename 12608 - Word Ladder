@@ -1,0 +1,147 @@
+#include <bits/stdc++.h>
+using namespace std;
+/*
+
+░█████╗░░█████╗░███╗░░░███╗██████╗░██╗░░░░░███████╗████████╗███████╗
+██╔══██╗██╔══██╗████╗░████║██╔══██╗██║░░░░░██╔════╝╚══██╔══╝██╔════╝
+██║░░╚═╝██║░░██║██╔████╔██║██████╔╝██║░░░░░█████╗░░░░░██║░░░█████╗░░
+██║░░██╗██║░░██║██║╚██╔╝██║██╔═══╝░██║░░░░░██╔══╝░░░░░██║░░░██╔══╝░░
+╚█████╔╝╚█████╔╝██║░╚═╝░██║██║░░░░░███████╗███████╗░░░██║░░░███████╗
+░╚════╝░░╚════╝░╚═╝░░░░░╚═╝╚═╝░░░░░╚══════╝╚══════╝░░░╚═╝░░░╚══════╝
+
+
+*/
+vector<string> words;
+vector<vector<int>> connections;
+vector<int> visited;
+vector<int> dist;
+vector<int> past;
+vector<string> path;
+int num_words, starti = -1, endi, ans;
+string start, endd;
+bool madeit= false;
+bool is_connected_slength(string a, string b) {
+    bool armed = false;
+    for (int i = 0; i < a.size(); ++i) {
+        if (a[i] != b[i]) {
+            if (!armed) {
+                armed = true;
+            } else {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+bool is_connected_s(string a, string b) {
+    bool armed = false;
+    for (int i = 0; i < a.size(); ++i) {
+        if (a[i] != b[i]) {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool is_connected(string a, string b) {
+    string bigger, smaller;
+    if (a.size() == b.size()) {
+        return is_connected_slength(a, b);
+    } else if (a.size()-b.size()==1 || a.size()-b.size()==-1) {
+        if (a.size() > b.size()) {
+            bigger = a;
+            smaller = b;
+        } else {
+            bigger = b;
+            smaller = a;
+        }
+        for (int i = 0; i < bigger.size(); ++i) {
+            char topop = bigger[i];
+            bigger.erase(i, 1);
+            if (is_connected_s(bigger, smaller)) {
+                return true;
+            }
+            bigger.insert(bigger.begin() + i, topop);
+        }
+    }
+    return false;
+}
+bool is_valid(int x) {
+    return !visited[x];
+}
+
+void construct_path(int end) {
+    int route = end;
+    while (path.size()<ans) {
+        path.push_back(words[route]);
+        route = past[route];
+    }
+}
+void bfs() {
+    queue<int> q;
+    q.push(starti);
+    visited[starti] = 1;
+    while (!q.empty()) {
+        auto head = q.front();
+        q.pop();
+        if (words[head] == endd) {
+            ans = dist[head];
+            madeit = true;
+            construct_path(head);
+            return;
+        }
+        for (int i = 0; i < connections[head].size(); ++i) {
+            if (is_valid(connections[head][i])) {
+                q.push(connections[head][i]);
+                visited[connections[head][i]] = 1;
+                dist[connections[head][i]] = dist[head] + 1;
+                past[connections[head][i]] = head;
+            }
+        }
+    }
+}
+int main() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    cin >> start >> endd >> num_words;
+    for (int i = 0; i < num_words; ++i) {
+        string word;
+        cin >> word;
+        if (word == start) {
+            starti = i;
+        } else if(word == endd) {
+            endi = i;
+        }
+        words.push_back(word);
+    }
+    if (starti == -1) {
+        words.push_back(start);
+        starti = words.size() - 1;
+        ++num_words;
+    }
+    connections.resize(num_words, vector<int> (0,0));
+    visited.resize(num_words, 0);
+    dist.resize(num_words, 0);
+    past.resize(num_words, 0);
+    for (int i = 0; i < num_words - 1; ++i) {
+        for (int j = i+1; j < num_words; ++j) {
+            if (is_connected(words[i], words[j])) {
+                connections[i].push_back(j);
+                connections[j].push_back(i);
+            }
+        }
+    }
+    bfs();
+    if (madeit) {
+        cout << ans;
+    } else {
+        cout << -1;
+    }
+    /*
+    cout << "\n path taken: ";
+    for (int i = path.size()-1; i>=0; --i) {
+        cout << path[i] << " ";
+    }
+    */
+}

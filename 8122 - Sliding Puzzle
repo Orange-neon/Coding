@@ -1,0 +1,163 @@
+#include <bits/stdc++.h>
+using namespace std;
+struct Grid {
+    array<int, 9> pattern;
+    int z_index;
+};
+
+bool operator< (Grid a, Grid b) {
+    return (a.pattern < b.pattern);
+}
+int z, ans;
+array<int, 9> maze;
+array<int, 9> target = {1,2,3,8,0,4,7,6,5};
+map<Grid, bool> visited_start;
+map<Grid, bool> visited_end;
+map<Grid, int> distance_start;
+map<Grid, int> distance_end;
+array<int, 4> d = {1, -1, 3, -3};
+bool madeit = false;
+void bi_bfs() {
+    queue<Grid> q_s;
+    queue<Grid> q_e;
+    q_s.push({maze, z});
+    q_e.push({target, 4});
+    while (!q_s.empty() && !q_e.empty()) {
+        auto s_head = q_s.front();
+        q_s.pop();
+        auto e_head = q_e.front();
+        q_e.pop();
+        if (s_head.z_index % 3 != 1) {
+            auto newp = s_head.pattern;
+            swap(newp[s_head.z_index], newp[s_head.z_index-1]);
+            if (!visited_start[{newp, s_head.z_index - 1}]) {
+                q_s.push({newp, s_head.z_index - 1});
+                visited_start[{newp, s_head.z_index - 1}] = true;
+                distance_start[{newp, s_head.z_index - 1}] = distance_start[{s_head.pattern, s_head.z_index}] + 1;
+                if (visited_end[{newp, s_head.z_index - 1}]) {
+                    ans = distance_start[{newp, s_head.z_index - 1}] + distance_end[{e_head.pattern, e_head.z_index}] -1;
+                    madeit = true;
+                    return;
+                }
+            }
+        }
+        if (e_head.z_index % 3 != 1) {
+            auto newp = e_head.pattern;
+            swap(newp[e_head.z_index], newp[e_head.z_index-1]);
+            if (!visited_end[{newp, e_head.z_index - 1}]) {
+                q_e.push({newp, e_head.z_index - 1});
+                visited_end[{newp, e_head.z_index - 1}] = true;
+                distance_end[{newp, e_head.z_index - 1}] = distance_end[{e_head.pattern, e_head.z_index}] + 1;
+                if (visited_start[{newp, e_head.z_index - 1}]) {
+                    ans = distance_start[{newp, s_head.z_index - 1}] + distance_end[{e_head.pattern, e_head.z_index}] -1;
+                    madeit = true;
+                    return;
+                }
+            }
+        }
+        if (s_head.z_index % 3 != 0) {
+            auto newp = s_head.pattern;
+            swap(newp[s_head.z_index], newp[s_head.z_index+1]);
+            if (!visited_start[{newp, s_head.z_index + 1}]) {
+                q_s.push({newp, s_head.z_index + 1});
+                visited_start[{newp, s_head.z_index + 1}] = true;
+                distance_start[{newp, s_head.z_index + 1}] = distance_start[{s_head.pattern, s_head.z_index}] + 1;
+                if (visited_end[{newp, s_head.z_index + 1}]) {
+                    ans = distance_start[{newp, s_head.z_index - 1}] + distance_end[{e_head.pattern, e_head.z_index}] -1;
+                    madeit = true;
+                    return;
+                }
+            }
+        }
+        if (e_head.z_index % 3 != 0) {
+            auto newp = e_head.pattern;
+            swap(newp[e_head.z_index], newp[e_head.z_index + 1]);
+            if (!visited_end[{newp, e_head.z_index + 1}]) {
+                q_e.push({newp, e_head.z_index + 1});
+                visited_end[{newp, e_head.z_index + 1}] = true;
+                distance_end[{newp, e_head.z_index - 1}] = distance_end[{e_head.pattern, e_head.z_index}] + 1;
+                if (visited_start[{newp, e_head.z_index - 1}]) {
+                    ans = distance_start[{newp, s_head.z_index - 1}] + distance_end[{e_head.pattern, e_head.z_index}] -1;
+                    madeit = true;
+                    return;
+                }
+            }
+        }
+        if (s_head.z_index > 2) {
+            auto newp = s_head.pattern;
+            swap(newp[s_head.z_index], newp[s_head.z_index - 3]);
+            if (!visited_start[{newp, s_head.z_index - 3}]) {
+                q_s.push({newp, s_head.z_index - 3});
+                visited_start[{newp, s_head.z_index - 3}] = true;
+                distance_start[{newp, s_head.z_index - 3}] = distance_start[{s_head.pattern, s_head.z_index}] + 1;
+                if (visited_end[{newp, s_head.z_index - 3}]) {
+                    ans = distance_start[{newp, s_head.z_index - 1}] + distance_end[{e_head.pattern, e_head.z_index}] -1;
+                    madeit = true;
+                    return;
+                }
+            }
+        }
+        if (e_head.z_index > 2) {
+            auto newp = e_head.pattern;
+            swap(newp[e_head.z_index], newp[e_head.z_index- 3]);
+            if (!visited_end[{newp, e_head.z_index - 3}]) {
+                q_e.push({newp, e_head.z_index - 3});
+                visited_end[{newp, e_head.z_index - 3}] = true;
+                distance_end[{newp, e_head.z_index - 1}] = distance_end[{e_head.pattern, e_head.z_index}] + 1;
+                if (visited_start[{newp, e_head.z_index - 1}]) {
+                    ans = distance_start[{newp, s_head.z_index - 1}] + distance_end[{e_head.pattern, e_head.z_index}] -1;
+                    madeit = true;
+                    return;
+                }
+            }
+        }
+        if (s_head.z_index < 6) {
+            auto newp = s_head.pattern;
+            swap(newp[s_head.z_index], newp[s_head.z_index + 3]);
+            if (!visited_start[{newp, s_head.z_index + 3}]) {
+                q_s.push({newp, s_head.z_index + 3});
+                visited_start[{newp, s_head.z_index + 3}] = true;
+                distance_start[{newp, s_head.z_index + 3}] = distance_start[{s_head.pattern, s_head.z_index}] + 1;
+                if (visited_end[{newp, s_head.z_index + 3}]) {
+                    ans = distance_start[{newp, s_head.z_index - 1}] + distance_end[{e_head.pattern, e_head.z_index}] -1;
+                    madeit = true;
+                    return;
+                }
+            }
+        }
+        if (e_head.z_index < 6) {
+            auto newp = e_head.pattern;
+            swap(newp[e_head.z_index], newp[e_head.z_index+ 3]);
+            if (!visited_end[{newp, e_head.z_index + 3}]) {
+                q_e.push({newp, e_head.z_index + 3});
+                visited_end[{newp, e_head.z_index + 3}] = true;
+                distance_end[{newp, e_head.z_index - 1}] = distance_end[{e_head.pattern, e_head.z_index}] + 1;
+                if (visited_start[{newp, e_head.z_index - 1}]) {
+                    ans = distance_start[{newp, s_head.z_index - 1}] + distance_end[{e_head.pattern, e_head.z_index}] -1;
+                    madeit = true;
+                    return;
+                }
+            }
+        }
+    }
+}
+int main() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    for (int i = 0; i < 9; ++i) {
+        char num;
+        cin >> num;
+        if (num == '0') {
+            z = i;
+        }
+        maze[i] = num - '0';
+    }
+    distance_start[{target, 4}] = 0;
+    distance_end[{maze, z}] = 0;
+    bi_bfs();
+    if (madeit) {
+        cout << ans;
+    } else {
+        cout << 0;
+    }
+}

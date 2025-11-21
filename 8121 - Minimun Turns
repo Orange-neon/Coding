@@ -1,0 +1,77 @@
+#include <bits/stdc++.h>
+using namespace std;
+int n, m, sx, sy, ex, ey, ans;
+bool madeit = false;
+vector<vector<int>> maze;
+array<array<int, 100>, 100> turns;
+array<array<int, 100>, 100> visited;
+array<int, 4> dx = {0, 0, 1, -1};
+array<int, 4> dy = {1, -1, 0, 0};
+
+bool is_valid(int x, int y) {
+    return x>=0 && x < m && y>=0 && y<n && !visited[y][x] && !maze[y][x];
+}
+
+bool iss_valid(int x, int y) {
+    return x>=0 && x < m && y>=0 && y<n && !maze[y][x];
+}
+
+void bfs() {
+    queue<pair<int, int>> q;
+    q.push({sx, sy});
+    visited.at(sy).at(sx) = 1;
+    turns.at(sy).at(sx) = 0;
+    while (!q.empty()) {
+        auto head = q.front();
+        q.pop();
+        if (head.first == ex && head.second == ey) {
+            ans = turns.at(ey).at(ex);
+            madeit = true;
+            return;
+        }
+        for (int i = 0; i<4; ++i) {
+            int px = head.first, py = head.second;
+            int turnsval = turns.at(py).at(px) + 1;
+            while (iss_valid(px + dx[i], py + dy[i])) {
+                int nx = px + dx[i], ny = py + dy[i];
+                if (is_valid(px + dx[i], py + dy[i])) {
+                    q.push({nx, ny});
+                    visited.at(ny).at(nx) = 1;
+                    turns.at(ny).at(nx) = turnsval;
+                }
+                px += dx[i];
+                py += dy[i];
+            }
+        }
+    }
+}
+int main() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    cin >> n >> m;
+    for (int i = 0; i < n; ++i) {
+        vector<int> row(m);
+        for (int j = 0; j < m; ++j) {
+            cin >> row[j];
+        }
+        maze.push_back(row);
+    }
+    cin >> sy >> sx >> ey >> ex;
+    sy = sy-1;
+    sx = sx-1;
+    ey = ey-1;
+    ex = ex-1;
+    bfs();
+    if (madeit) {
+        cout <<ans;
+    } else {
+        cout <<-1;
+    }
+    cout <<"\n HERES TURN MAPP" <<'\n';
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < m; ++j) {
+            cout <<turns[i][j]<<" ";
+        }
+        cout << '\n';
+    }
+}

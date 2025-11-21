@@ -1,0 +1,138 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int n,m, start_x, start_y, end_x, end_y, ans, add1 = 1, add2 =1;
+bool overlap = false;
+vector<vector<char>> maze;
+map<pair<int, int>, int> visited1;
+map<pair<int, int>, int> visited2;
+vector<vector<int>> times1;
+vector<vector<int>> times2;
+array<int, 8> dx1 = {0, -1, -1, -1, 0, 1, 1, 1};
+array<int, 8> dy1 = {1, 1, 0, -1, -1, -1, 0, 1};
+array<int, 4> dx2 = {0, -1, 0, 1};
+array<int, 4> dy2 = {1, 0,-1, 0};
+bool is_valid(int x, int y, bool s) {
+    if (s) {
+        return x >= 0 && x < m && y >=0 && y < n && visited1[{x, y}] != 1 && maze[y][x] != '#'; 
+    } else {
+        return x >= 0 && x < m && y >=0 && y < n && visited2[{x, y}] != 1 && maze[y][x] != '#'; 
+    }
+}
+
+void bi_bfs() {
+    queue<pair<int, int>> q1;
+    queue<pair<int, int>> q2;
+    q1.push({start_x, start_y});
+    q2.push({end_x, end_y});
+    visited1[{start_x, start_y}] = 1;
+    visited2[{end_x, end_y}] = 1;
+    while (!q1.empty() || !q2.empty()) {
+        int limit1 = add1;
+        add1 = 0;
+        for (int w = 0; w < limit1; ++w) {
+            if (w == 0) {
+                add1 = 0;
+            }
+            pair<int, int> one = q1.front();
+            q1.pop();
+            cout<<"                                                 running here checking around " << one.first <<" " <<one.second <<'\n';
+            for (int i = 0; i < 8; ++i) {
+                int nx = one.first + dx1[i], ny = one.second + dy1[i];
+                if (nx == 1 && ny == 0) {
+                    cout<<"\n MMMMMMMMMMMMMMMMMMMMMMMM about to check 1,0 ";
+                }
+                if (is_valid(nx, ny, true)) {
+                    q1.push({nx, ny});
+                    ++add1;
+                    cout<<"\n pushed into q1: " << nx<<" "<<ny<<'\n';
+                    cout<<"\n bruh why so many times what even is i^^^: "<<i<<"\n _________WE GOT THAT POINT FROM " << one.first<<" "<<one.second<<'\n';
+                    visited1[{nx, ny}] = 1;
+                    times1[ny][nx] = times1[one.second][one.first] + 1;
+                    if (visited2[{nx, ny}] == 1) {
+                        overlap = true;
+                        cout << nx <<" "<<ny<<'\n';
+                        cout << "from this point, in the 8 direction: " << one.first << " "<<one.second;
+                        ans = max(times1[ny][nx], times2[ny][nx]);
+                        return;
+                    }
+                }
+            }
+            cout<<"\n ######## man when is the above function finishing limit 1 is: "<<limit1<<" \n";
+        }
+        int limit2 = add2;
+        add2 = 0;
+        for (int i = 0; i < limit2; ++i) {
+            if (i == 0) {
+                add2 = 0;
+            }
+            if (!q2.empty()) {
+                pair<int, int> two = q2.front();
+                q2.pop();
+                for (int i = 0; i < 4; ++i) {
+                    int nx = two.first + dx2[i], ny = two.second + dy2[i];
+                    if (is_valid(nx, ny, false)) {
+                        cout <<"\n I ADDED A POINTT IN Q2!!!!" << nx << " " << ny<<'\n';
+                        visited2[{nx, ny}] = 1;
+                        times2[ny][nx] = times2[two.second][two.first] + 1;
+                        if (visited1[{nx, ny}] == 1) {
+                            overlap = true;
+                            cout << nx <<" "<<ny<<'\n';
+                            cout << "from this point, in the 4 direction (first): " << two.first << " "<<two.second;
+                            ans = max(times1[ny][nx], times2[ny][nx]);
+                            return;
+                        }
+                        for (int i = 0; i < 4; ++i) {
+                            int nx2 = nx + dx2[i], ny2 = ny + dy2[i];
+                            if (is_valid(nx2, ny2, false)) {
+                                q2.push({nx2, ny2});
+                                ++add2;
+                                cout <<"\n I ADDED A POINTT IN Q2!!!! (second)" << nx2 << " " << ny2<<'\n';
+                                visited2[{nx2, ny2}] = 1;
+                                times2[ny2][nx2] = times2[ny][nx];
+                                if (visited1[{nx2, ny2}] == 1) {
+                                    overlap = true;
+                                    cout << nx2 <<" "<<ny2<<'\n';
+                                    cout << "from this point, in the 4 direction (second): " << nx << " "<<ny;
+                                    ans = max(times1[ny2][nx2], times2[ny2][nx2]);
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                cout<<"\n uhh soooo q2s empty....\n";
+            }
+        }
+    }
+}
+int main () {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    cin >> n >> m;
+    for (int i = 0; i < n; ++i) {
+        vector<char> row;
+        for (int j = 0; j < m; ++j) {
+            char pt;
+            cin >> pt;
+            row.push_back(pt);
+            if (pt == 'C') {
+                start_x = j;
+                start_y = i;
+            } else if (pt == 'D') {
+                end_x = j;
+                end_y = i;
+            }
+        }
+        maze.push_back(row);
+    }
+    times1.resize(n, vector<int> (m,0));
+    times2.resize(n, vector<int> (m,0));
+    bi_bfs();
+    if (overlap == true) {
+        cout << "\nYES\n" << ans; 
+    } else {
+        cout << "NO";
+    }
+}

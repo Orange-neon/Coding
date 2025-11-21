@@ -1,0 +1,75 @@
+#include <bits/stdc++.h>
+using namespace std;
+int n, m, closing_index = 0, filled = 0;
+bool connected = false;
+set<int> open_farms;
+vector<int> closing_order;
+vector<int> visited;
+vector<vector<int>> connections;
+
+bool is_valid(int x) {
+    return (open_farms.count(x) && !visited[x]); // **
+}
+int newindex(int id) {
+    if (id == closing_order.size() - 1) {
+        return 0;
+    }
+    return ++id;
+}
+void dfs(int farm) {
+    if (!is_valid(farm)) {
+        cout << "\n bro this not valid " << farm+1<<'\n';
+        return;
+    }
+    ++filled;
+    visited[farm] = 1;
+    for (int i = 0; i < connections[farm].size(); ++i) { // **
+        auto nbr = connections[farm][i];
+        cout << "\n OI visited this nbr " << nbr+1 << " from " << farm+1 << '\n'; 
+        dfs(nbr);
+    }
+}
+int main() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    cin >> n >> m;  
+    connections.resize(n, vector<int>(0,0));
+    visited.resize(n, 0);
+    for (int i = 0; i < m; ++i) {
+        int st, end;
+        cin >> st >> end;
+        connections.at(st-1).push_back(end-1);
+        connections.at(end-1).push_back(st-1);// **
+    }
+    for (int i = 0; i < n; ++i) {
+        int barn;
+        cin >> barn;
+        open_farms.insert(barn-1);
+        closing_order.push_back(barn-1);
+    }
+    cout <<"jst checking, what are my open farms?\n";
+    for (int i : open_farms) {
+        cout << i <<" ";
+    }
+    cout << '\n';
+    filled = 0;
+    visited.resize(n, 0);
+    dfs(closing_order.at(closing_index));
+    if (filled != open_farms.size()) {
+        cout << "NO\n";
+    } else {
+        cout <<"YES\n";
+    }
+    while (!open_farms.empty() && closing_index<n - 1) {
+        filled = 0;
+        visited.resize(n, 0);
+        open_farms.erase(closing_order.at(closing_index)); // **
+        dfs(*open_farms.begin());
+        ++closing_index;
+        if (filled != open_farms.size()) {
+            cout << "NO\n";
+        } else {
+            cout <<"YES\n";
+        }
+    }
+}

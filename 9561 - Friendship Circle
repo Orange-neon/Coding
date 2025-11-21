@@ -1,0 +1,42 @@
+#include <bits/stdc++.h>
+using namespace std;
+vector<vector<int>> connections;
+vector<int> visited;
+set<int> nodes;
+int n, ans = 0;
+
+bool is_valid(int a) {
+    return !(visited[a]);
+}
+
+void dfs(int start) {
+    if (is_valid(start)) {
+        visited[start] = 1;
+        for (auto neighbor : connections[start]) {
+            dfs(neighbor);
+        }
+    }
+}
+int main() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    cin >> n;
+    connections.resize(n, vector<int> (0,0));
+    visited.resize(n);
+    for (int i = 0; i<n; ++i) {
+        for (int j = 0; j < n; ++j) {
+            int pt;
+            cin >> pt;
+            if (pt == 1) {
+                connections[i].push_back(j);
+            }
+        }
+    }
+    for (int i = 0; i < n; ++i) {
+        if (is_valid(i)) {
+            dfs(i);
+            ++ans;
+        }
+    }
+    cout << ans;
+}

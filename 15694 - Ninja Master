@@ -1,0 +1,59 @@
+#include<bits/stdc++.h>
+using namespace std;
+int n;
+bool madeit = false;
+vector<int> maze;
+vector<int> visited;
+
+struct Move {
+    int log, dist;
+};
+bool is_valid(int x) {
+    return x >=0 && x < n && !visited[x];
+}
+
+void bfs() {
+    queue<Move> q;
+    q.push({maze[0], 0});
+    visited[0] = 1;
+    while (!q.empty()) {
+        Move top = q.front();
+        if (top.log == n - 1) {
+            madeit = true;
+            cout << top.dist;
+            return;
+        }
+        if (maze[top.log] <= 0) {
+          for (int nx = 0; nx <= top.log + maze[top.log]; ++nx) {
+              if (is_valid(nx)) {
+                  q.push({nx, top.dist + 1});
+                  visited[nx] = 1;
+              }
+          }
+        } else {
+          for (int nx = top.log + 1; nx <= top.log + maze[top.log]; ++nx) {
+              if (is_valid(nx)) {
+                  q.push({nx, top.dist + 1});
+                  visited[nx] = 1;
+              }
+          }
+        }
+        q.pop();
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    cin >> n;
+    for (int i = 0; i < n; ++i) {
+        int pt;
+        cin >> pt;
+        maze.push_back(pt);
+    }
+    visited.resize(n, 0);
+    bfs();
+    if (!madeit) {
+        cout << -1;
+    }
+}

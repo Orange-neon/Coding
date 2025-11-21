@@ -1,0 +1,59 @@
+#include <bits/stdc++.h>
+//ERRRONOUS
+using namespace std;
+vector<int> list;
+int nm;
+map<string, bool> visited;
+map<string, int> answer;
+vector<char> d = {'+', '-', ' '};
+//function works
+int findsum(string n) {
+    vector<int> nums;
+    nums.push_back(1);
+    for (int i = 0; i < n.size(); ++i) {
+        if (n[i] == '+') {
+            nums.push_back(i+2);
+        } else if (n[i] == '-') {
+            nums.push_back(-1 * (i+2));
+        } else {
+            int topush = nums.back() * 10 + i + 2;
+            nums.pop_back();
+            nums.push_back(topush);
+        }
+    }
+    int ans = 0;
+    for (int i : nums) {
+        ans += i;
+    }
+    return ans;
+}
+
+void dfs(string n) {
+    if (n.size() == nm - 1 && findsum(n) == 0) {
+        answer[n] = 0;
+        return;
+    }
+    for (int i = 0; i < 3; ++i) {
+        string fn = n;
+        fn += d[i];
+        if (!visited[fn]) {
+            dfs(fn);
+            visited[fn] = 1;
+        }
+    }
+}
+int main() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    cin >> nm;
+    string start="";
+    dfs(start);
+    for (const auto& pai : answer) {
+        string ans = "1";
+        for (int k = 0; k < pai.first.size(); ++k) {
+            ans+=to_string(k+2);
+            ans += pai.first[k];
+        }
+        cout << ans <<'\n';
+    }
+}

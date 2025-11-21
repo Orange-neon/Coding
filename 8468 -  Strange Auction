@@ -1,0 +1,40 @@
+#include <bits/stdc++.h>
+using namespace std;
+double choose(int n, int r) {
+    double product = 1;
+    double i = n;
+    double j = min(r, n-r);
+    //cout << i <<" this is j now "<< j;
+    r = j;
+    while (i > n-r && j >0) {
+        product *= i/j;
+        --i;
+        --j;
+        //cout <<"\n here product "<<product;
+    }
+    return product;
+}
+int main() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    int w,p, a,b, smal, fin = 0;
+    vector<pair<int,int>> ppairs;
+    cin >> w >> p >> a >> b;
+    int gcf_val = gcd(a,b);
+    a/=gcf_val;
+    b/=gcf_val;
+    int diff = w- p;
+    diff/=gcf_val;
+    smal = min(a, b);
+    int big = max(a,b);
+    for (int i = 0; i <= (diff)/smal; ++i) {
+        if ((diff - (i * smal)) % big == 0) {
+            ppairs.push_back({i, (diff - (i * smal)) / big});
+        }
+    }
+    for (auto m : ppairs) {
+        int x = m.first, y = m.second;
+        fin += round(choose(x + y, y));
+    }
+    cout << fin;
+}

@@ -1,0 +1,82 @@
+#include <bits/stdc++.h>
+/*
+input::
+5 4 2 3
+1 1
+5 4
+3 3
+5 3
+2 4
+*/
+using namespace std;
+int n, m, a, b, leaders_visited_num = 0;
+map<pair<int, int>, bool> leaders_visited;
+vector<pair<int, int>> infections;
+vector<vector<int>> dist;
+vector<int> ans;
+array<int, 4> dx = {0, 0, 1, -1};
+array<int, 4> dy = {1, -1, 0, 0};
+
+bool is_valid(int x, int y) {
+    return x>=0 && x<m && y>=0 && y<n && dist[y][x]==0;
+}
+// REMEBRE TO DIAL BACK DIST
+void bfs() {
+    queue<pair<int, int>> q;
+    for (auto i : infections) {
+        q.push(i);
+        dist[i.second][i.first] = 1;
+    }
+    while (!q.empty()) {
+        auto head = q.front();
+        q.pop();
+        if (leaders_visited_num == leaders_visited.size()) {
+            cout << "\n did i every visited alll the learderss??";
+            for (auto i : leaders_visited) {
+                ans.push_back(dist[(i.first).second][(i.first).first]-1);
+                cout << "\n\n\n\n No distance is zero right? lets see  " << dist[(i.first).second][(i.first).first]<<"\n\n\n\n";
+                if (dist[(i.first).second][(i.first).first] == 0) {
+                    cout << "\n\n                                           BRUH WHY 0 HERE " << (i.first).first<<", "<<(i.first).second<<'\n';
+                }
+            }
+            return;
+        }
+        for (int i = 0; i < 4; ++i) {
+            int nx = head.first + dx[i], ny = head.second + dy[i];
+            if (is_valid(nx, ny)) {
+                q.push({nx, ny});
+                dist[ny][nx] = dist[head.second][head.first] + 1;
+                cout << "\n checking " << nx+1 <<", " << ny+1;
+                if (leaders_visited.count({nx, ny}) == 1) {
+                    ++leaders_visited_num;
+                    leaders_visited[{nx, ny}] = 1;
+                    cout << "\n I VISITED A LEADER AT " << nx+1 <<", " << ny+1;
+                }
+            }
+        }
+    }
+}
+int main() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    cin >> n >> m >> a >> b;
+    dist.resize(n, vector<int>(m, 0));
+    for (int i = 0; i < a; ++i) {
+        int x,y;
+        cin >> y >> x;
+        infections.push_back({x-1,y-1});
+    }
+    for (int i = 0; i < b; ++i) {
+        int x,y;
+        cin >> y >> x;
+        leaders_visited[{x-1,y-1}] = 0;
+        cout << "\n okay in leaders map i have this point " << x<<", "<< y;
+    }
+    bfs();
+    for (int i : ans) {
+        cout<< '\n' << i;
+    }
+    if (ans.empty()) {
+        cout <<"\n ANS IS EMPTY ;SOB;SBOG;SBOKOGTJGIRJIRJG";
+    }
+}

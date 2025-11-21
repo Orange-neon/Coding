@@ -1,0 +1,96 @@
+#include <bits/stdc++.h>
+using namespace std;
+/* input 
+
+3 3 4 20 
+0 1 1 1 
+0 0 1 1 
+0 1 1 1 
+1 1 1 1 
+1 0 0 1 
+0 1 1 1 
+0 0 0 0 
+0 1 1 0 
+0 1 1 0
+
+*/
+int a,b,c,t, ans = 0;
+bool madeit = false;
+struct Treed {
+    int x;
+    int y;
+    int z;
+};
+vector<vector<vector<int>>> maze;
+vector<vector<vector<int>>> dist;
+vector<vector<vector<int>>> visited;
+array<int,6> dx = {0, 0, 0, 0, 1, -1};
+array<int,6> dy = {0, 0, 1, -1, 0, 0};
+array<int,6> dz = {1, -1, 0, 0, 0, 0};
+bool is_valid(int x, int y, int z) {
+    return x>=0 && x < a && y>=0 && y < b && z>=0 && z < c && !visited[z][y][x] && !(maze[z][y][x] == 1);
+}
+
+void bfs() {
+    queue<Treed> q;
+    q.push({0,0,0});
+    visited[0][0][0] = 1;
+    while (!q.empty()) {
+        auto head = q.front();
+        if (head.x == a - 1 && head.y == b -1 && head.z == c - 1) {
+            ans = dist[head.z][head.y][head.x];
+            if (ans <= t) {
+                madeit = true;
+            } else {
+                cout << "\n gasp it doesnt work!!";
+            }
+            return;
+        }
+        q.pop();
+        for (int i = 0; i < 6; ++i) {
+            int nx = head.x + dx[i], ny = head.y + dy[i], nz = head.z + dz[i];
+            if (is_valid(nx, ny, nz)) {
+                q.push({nx, ny, nz});
+                visited[nz][ny][nx] = 1;
+                dist[nz][ny][nx] = dist[head.z][head.y][head.x] + 1;
+            }
+        }
+    }
+}
+int main() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    cin >> c >> b >> a >> t;
+    for (int i = 0; i < c; ++i) {
+        vector<vector<int>> plane;
+        for (int j = 0; j < b; ++j) {
+            vector<int> row;
+            for (int k = 0; k < a; ++k) {
+                int pt;
+                cin >> pt;
+                row.push_back(pt);
+            }
+            plane.push_back(row);
+        }
+        maze.push_back(plane);
+    }
+    dist.resize(c, vector<vector<int>>(b, vector<int>(a, 0)));
+    visited.resize(c, vector<vector<int>>(b, vector<int>(a, 0)));
+    
+    bfs();
+    if (madeit) {
+        cout << ans;
+    } else {
+        cout << -1;
+    }
+    cout << '\n';
+    for (int i = 0; i < c; ++i) {
+        for (int j = 0; j < b; ++j) {
+            for (int k = 0; k < a; ++k) {
+                cout << maze[i][j][k] << " ";
+            }
+            cout << '\n';
+        }
+        cout << "floor " << i << " ^^\n";
+    }
+}

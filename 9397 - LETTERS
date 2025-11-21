@@ -1,0 +1,38 @@
+#include<bits/stdc++.h>
+using namespace std;
+int n, m, longestPth = 0;
+vector<vector<char>> maze(n, vector<char>(m));
+map<char, int> visited;
+vector<int> dx = {0, 0, -1, 1};
+vector<int> dy = {1, -1, 0, 0};
+bool isValid(int x, int y) {
+    if (x < m && x >= 0 && y < n && y >=0 && (visited[maze[y][x]] == 0)) {
+        return true;
+    }
+    return false;
+}
+void dfs(int x, int y, int dist) {
+    if (!isValid(x, y)) {
+        return;
+    }
+    visited[maze[y][x]] = 1;
+    longestPth = max(longestPth, dist + 1);
+    for (int i = 0; i < 4; ++i) {
+        int nx = x + dx[i], ny = y + dy[i];
+        dfs(nx, ny, dist + 1);
+    }
+    visited[maze[y][x]] = 0;
+}
+int main() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    cin >> n >> m;
+    maze.resize(n, vector<char>(m));
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < m; ++j) {
+            cin >> maze.at(i).at(j);
+        }
+    }
+    dfs(0, 0, longestPth);
+    cout << longestPth;
+}

@@ -1,0 +1,21 @@
+#include <bits/stdc++.h>
+using namespace std;
+int main() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    long long n;
+    cin >> n;
+    map<long long, long long> key;
+    for (long long i = 0; i < n; ++i) {
+        long long num;
+        cin >> num;
+        if (key[num] == 1) {
+            ++key[num];
+        } else {
+            key[num] = 1;
+        }
+    }
+    for (const auto& pair : key) {
+        cout << pair.first << " " << pair.second << '\n';
+    }
+}

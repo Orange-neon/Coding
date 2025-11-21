@@ -1,0 +1,59 @@
+#include <bits/stdc++.h>
+using namespace std;
+set<long long> valid_nums;
+int n, depth;
+bool is_valid(vector<int> &num) {
+    int eight = 0, five = 0;
+    for (int i : num) {
+        if (i == 8) {
+            ++eight;
+        } else if (i == 5) {
+            ++five;
+        } else {
+            return false;
+        }
+    }
+    if (eight == five) {
+        return true;
+    }
+    return false;
+}
+
+long long toint(vector<int> &soon_num) {
+    long long num = 0;
+    for (int j = soon_num.size()-1; j >=0; --j) {
+        num +=soon_num[soon_num.size()-j-1]*pow(10, j);
+    }
+    return num;
+}
+void bfs(int x) {
+    queue<vector<int>> q;\
+    vector<int> starting(1, x);
+    q.push(starting);
+    while (q.front().size() <= depth) {
+        auto head = q.front();
+        q.pop();
+        head.push_back(8);
+        q.push(head);
+        if (is_valid(head)) {
+            valid_nums.insert(toint(head));
+            //cout << "\n oi look this is valid " << toint(head) <<" and the size is "<< head.size();
+        }
+        head.pop_back();
+        head.push_back(5);
+        q.push(head);
+        if (is_valid(head)) {
+            valid_nums.insert(toint(head));
+            //cout << "\n oi look this is valid " << toint(head) <<" and the size is "<< head.size();
+        }
+    }
+}
+int main() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    cin >>  n;
+    depth = floor(log10(n)) + 3;
+    bfs(5);
+    bfs(8);
+    cout <<*(valid_nums.lower_bound(n));
+}

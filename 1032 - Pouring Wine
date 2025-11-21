@@ -1,0 +1,66 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+array<pair<int, int>, 6> d = {{{0,1},{0,2},{1,0},{1,2}, {2,0}, {2,1}}};
+array<int, 3> c;
+map<array<int, 3>, int> visited;
+bool madeit = 0;
+int ans;
+void bfs() {
+    queue<array<int, 3>> q;
+    q.push({c[0], 0, 0});
+    visited[{c[0], 0, 0}] = 0;
+    while (!q.empty()) {
+        auto amt = q.front();
+        if (amt[0] == amt[1] && amt[2] == 0) {
+            madeit = 1;
+            ans = visited[amt];
+            //cout << "AMT MAGIC !!! " << amt[0] << " " << amt[1] << " " << amt[2] <<'\n';
+            return;
+        } else if (amt[0] == amt[2] && amt[1] == 0) {
+            madeit = 1;
+            ans = visited[amt];
+            //cout << "AMT MAGIC !!! " << amt[0] << " " << amt[1] << " " << amt[2] <<'\n';
+            return;
+        }
+        for (auto pourd : d) {
+            amt = q.front();
+            int x = pourd.first, y = pourd.second;
+            if (amt[x] <= c[y] - amt[y]) {
+                amt[y] += amt[x];
+                amt[x] = 0;
+                if (visited.find(amt) == visited.end()) {
+                    q.push(amt);
+                    visited[amt] = visited[q.front()] + 1;
+                }
+            } else {
+                amt[x] = amt[x] - (c[y] - amt[y]);
+                amt[y] = c[y];
+                if (visited.find(amt) == visited.end()) {
+                    q.push(amt);
+                    //cout << "is this tweaking???? "<<amt[0]<<amt[1]<<amt[2]<<'\n';
+                    visited[amt] = visited[q.front()] + 1;
+                }
+            }
+        }
+        q.pop();
+    }
+}
+int main() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    for (int i = 0; i < 3; ++i) {
+        cin >> c[i];
+        //cout << "i got the input right? " << c[i] <<'\n';
+    }
+    if (c[0] %2 == 1) {
+        cout << "NO";
+        return 0;
+    }
+    bfs();
+    if (madeit) {
+        cout << ans;
+    } else {
+        cout << "NO";
+    }
+}

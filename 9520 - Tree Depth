@@ -1,0 +1,42 @@
+#include <bits/stdc++.h>
+using namespace std;
+int n, max_depth = 0;
+vector<vector<int>> connections;
+void dfs(int cdepth, int node) {
+    max_depth= max(max_depth, cdepth);
+    cout << "\n okay so i changed max depth to " << max_depth << " at this node " << node;
+    for (int i = 0; i < n; ++i) {
+        if (connections[node][i]) {
+            connections[node][i] = 0;
+            dfs(++cdepth, i);
+        }
+    }
+}
+int main() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    cin >> n;
+    connections.resize(n, vector<int>(n,0));
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < n; ++j) {
+            char pt;
+            cin >> pt;
+            if (pt == '1') {
+                connections[i][j] = 1;
+            } else {
+                connections[i][j] = 0;
+            }
+        }
+    }
+    /*
+    cout << "\n HEYYY THIE IS WHNAT IM GETTINGGGG\n";
+    for (auto i : connections) {
+        for (int j : i) {
+            cout << j;
+        }
+        cout << '\n';
+    }
+    */ //input is right
+    dfs(max_depth, 0);
+    cout << max_depth;
+}
