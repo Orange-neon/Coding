@@ -1,0 +1,36 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    //freopen("minSubSum.in", "r", stdin);
+    long long n;
+    long long maxSum = LLONG_MIN;
+    cin >> n;
+    vector<long long> nums(n, 0);
+    for (auto& i : nums) {
+        cin >> i;
+    }
+    vector<long long> shrunk;
+    vector<long long> shrunkPrefixS;
+    vector<long long> minPrefixSumPerIndex;
+    long long state = nums[0] / abs(nums[0]);
+    long long pSum = 0;
+    for (long long i : nums) {
+        pSum += i;
+        shrunkPrefixS.push_back(pSum);
+    }
+    minPrefixSumPerIndex.push_back(0);
+    for (long long i = 0; i < shrunkPrefixS.size(); ++i) {
+        if (shrunkPrefixS[i] < minPrefixSumPerIndex[minPrefixSumPerIndex.size() - 1]) {
+            minPrefixSumPerIndex.push_back(shrunkPrefixS[i]);
+        } else {
+            minPrefixSumPerIndex.push_back(minPrefixSumPerIndex[minPrefixSumPerIndex.size() - 1]);
+        }
+    }
+    for (long long i = 0; i < shrunkPrefixS.size(); ++i) {
+        maxSum = max(maxSum, shrunkPrefixS[i] - minPrefixSumPerIndex[i]);
+    }
+    maxSum = max(maxSum, shrunkPrefixS[shrunkPrefixS.size() - 1]);
+    cout << maxSum;
+}

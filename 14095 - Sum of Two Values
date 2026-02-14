@@ -1,0 +1,36 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    //freopen("1.in", "r", stdin);
+    long long n, target;
+    cin >> n >> target;
+    vector<long long> nums;
+    map<long long, vector<long long>> OnumsI;
+    for (long long i = 0; i < n; ++i) {
+        long long x;
+        cin >> x;
+        nums.push_back(x);
+        OnumsI[x].push_back(i + 1);
+    }
+    sort(nums.begin(), nums.end());
+    long long i = 0;
+    long long j = n - 1;
+    while (i < j) {
+        if (nums[i] + nums[j] < target) {
+            ++i;
+        } else if (nums[i] + nums[j] > target) {
+            --j;
+        } else {
+            vector<long long> pv;
+            pv.push_back(OnumsI[nums[i]][0]);
+            OnumsI[nums[i]].erase(OnumsI[nums[i]].begin());
+            pv.push_back(OnumsI[nums[j]][0]);
+            sort(pv.begin(), pv.end());
+            cout << pv[0] << " " << pv[1];
+            return 0;
+        }
+    }
+    cout << "IMPOSSIBLE";
+}

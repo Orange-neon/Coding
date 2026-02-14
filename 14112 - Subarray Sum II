@@ -1,0 +1,23 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    //freopen("c.in", "r", stdin);
+    long long n, x, ans = 0;
+    cin >> n >> x;
+    map<long long, long long> sumCounts;
+    vector<long long> nums;
+    vector<long long> psum = {0};
+    for (long long i = 0; i < n; ++i) {
+        long long a;
+        cin >> a;
+        nums.push_back(a);
+        psum.push_back(psum[psum.size() - 1] + a);
+    }
+    for (long long i = 0; i < n + 1; ++i) {
+        ans += sumCounts[psum[i] - x];
+        ++sumCounts[psum[i]];
+    }
+    cout << ans;
+}

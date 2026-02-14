@@ -1,7 +1,103 @@
 #include <bits/stdc++.h>
 using namespace std;
-int main() {;
-    ios::snyc_with_stdio(0);
-    cin.tie(0);
-    
+int n, k, shortTime = INT_MAX;
+vector<int> mechSums;
+vector<int> tasks;
+void bruteForce(int stage) {
+    int currt = *max_element(mechSums.begin(), mechSums.end());
+    /*
+    cout << "\n At stage: " << stage << " shorT is: " << shortTime << '\n';
+    cout << "\n At stage: " << stage << " mechsum is: ";
+    for (int i : mechSums) {
+        cout << i << ", ";
+    }
+    cout << '\n';
+    */
+    if (currt >= shortTime) {
+        return;
+    }
+    if (stage == n) {
+        shortTime = min(currt, shortTime);
+        return;
+    }
+    for (int i = 0; i < k; ++i) {
+        mechSums.at(i) += tasks.at(stage);
+        bruteForce(stage + 1);
+        mechSums.at(i) -= tasks.at(stage);
+    }
 }
+int main() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    cin >> n >> k;
+    mechSums.resize(k, 0);
+    for (int i = 0; i < n; ++i) {
+        int q;
+        cin >> q;
+        tasks.push_back(q);
+    }
+    sort(tasks.rbegin(), tasks.rend());
+    bruteForce(0);
+    cout << shortTime;
+}
+/*
+This code is MUCH FASTER, see if you can find out why!
+
+
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <climits>
+using namespace std;
+int n, k;
+int best_time=INT_MAX;
+vector<int> tasks;
+vector<int> machines;
+bool compare(int a, int b) {
+  return (a>b);
+}
+void divide_work(int task, int time) {
+    //cout<<time<<'\n';
+  if (task>=n) {
+    //cout<<"time to check time ";
+    best_time=min(best_time, time);
+    return;
+  }
+  if (time>=best_time) {
+    //cout<<"too big ";
+    return;
+  }
+  if (task < k) {
+    //cout<<"optimisation case ";
+    for (int mach_i=0; mach_i<task+1; ++mach_i) {
+      machines[mach_i]+=tasks[task];
+      divide_work(task+1, *max_element(machines.begin(), machines.end()));
+      machines[mach_i]-=tasks[task];
+    }
+  }
+  else {
+    //cout<<"ELSE CASE "<<' ';
+    for (int &machine : machines) {
+      machine+=tasks[task];
+      divide_work(task+1, *max_element(machines.begin(), machines.end()));
+      machine-=tasks[task];
+    }
+  }
+}
+int main() {
+  ios::sync_with_stdio(0);
+  cin.tie(0);
+  cin>>n>>k;
+  tasks.resize(n);
+  machines.resize(k,0);
+  for (int q=0; q<n; ++q) {
+    cin>>tasks[q];
+  }
+  sort(tasks.begin(), tasks.end(), compare);
+  divide_work(0,0);
+  cout<<best_time;
+  //for (int q : machines) {
+  //    cout<<"Machine "<<q<<'\n';
+  //}
+}
+  */

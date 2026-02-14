@@ -1,0 +1,30 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    //freopen("c.in", "r", stdin);
+    long long n;
+    cin >> n;
+    map<long long, long long> pos;
+    long long maxT = 0;
+    vector<long long> psum;
+    for (long long i = 0; i < n; ++i) {
+        long long a, b;
+        cin >> a >> b;
+        --a;
+        --b;
+        maxT = max(maxT, max(a, b));
+        pos[a] = 1;
+        pos[b] = -1;
+    }
+    ++maxT;
+    psum.push_back(pos[0]);
+    for (const auto& pairr : pos) {
+        if (pairr != *pos.begin()) {
+            psum.push_back(psum[psum.size() - 1] + pairr.second);
+        }
+    }
+    long long Max = *max_element(psum.begin(), psum.end());
+    cout << Max;
+}

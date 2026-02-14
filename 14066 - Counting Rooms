@@ -1,0 +1,45 @@
+#include<bits/stdc++.h>
+using namespace std;
+int n, m, numRooms = 0;
+vector<vector<char>> maze;
+vector<vector<int>> visited;
+set<pair<int, int>> startingPts;
+array<int, 4> dx = {0, 0, -1, 1};
+array<int, 4> dy = {1, -1, 0, 0};
+bool isValid(int x, int y) {
+    return (x >= 0 && x < m && y >=0 && y < n && !(visited[y][x] == 1));
+}
+
+void floodFill(int x, int y) {
+    if (!isValid(x, y)) {
+        return;
+    }
+    ++numRooms;
+    visited[y][x] == 1;
+    startingPts.erase({x, y});
+    for (int i = 0; i < 4; ++i) {
+        int nx = x + dx[i], ny = y + dy[i];
+        floodFill(nx, ny);
+    }
+}
+int main() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    cin >> n >> m;
+    maze.resize(n, vector<char>(m, ' '));
+    visited.resize(n, vector<int>(m, 0));
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < m; ++j) {
+            char c;
+            cin >> c;
+            if (c == '.') {
+                startingPts.insert({j, i});
+            }
+            maze.at(i).at(j) = c;
+        }
+    }
+    while (!(startingPts.empty())) {
+        floodFill(*(startingPts.begin()).first, *(startingPts.begin()).second);
+    }
+    cout << numRooms;
+}

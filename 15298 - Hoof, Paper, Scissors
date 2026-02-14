@@ -1,0 +1,45 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    //freopen("1.in", "r", stdin);
+    int n, ans = 0;
+    cin >> n;
+    vector<char> moves;
+    vector<int> Psum = {0};
+    vector<int> Ssum = {0};
+    vector<int> Hsum = {0};
+    for (int i = 0; i < n; ++i) {
+        char c;
+        cin >> c;
+        switch(c) {
+            case 'P':
+                moves.push_back('S');
+                Ssum.push_back(Ssum[Ssum.size() - 1] + 1);
+                Psum.push_back(Psum[Psum.size() - 1]);
+                Hsum.push_back(Hsum[Hsum.size() - 1]);
+                break;
+            case 'S':
+                moves.push_back('H');
+                Ssum.push_back(Ssum[Ssum.size() - 1]);
+                Psum.push_back(Psum[Psum.size() - 1]);
+                Hsum.push_back(Hsum[Hsum.size() - 1] + 1);
+                break;
+            default:
+                moves.push_back('P');
+                Ssum.push_back(Ssum[Ssum.size() - 1]);
+                Psum.push_back(Psum[Psum.size() - 1] + 1);
+                Hsum.push_back(Hsum[Hsum.size() - 1]);
+                break;
+        }
+    }
+    for (int i = 0; i <= n; ++i) {
+        int a = 0, b = 0, c = 0;
+        a = Psum[i] + max(Ssum[n] - Ssum[i], Hsum[n] - Hsum[i]);
+        b = Ssum[i] + max(Psum[n] - Psum[i], Hsum[n] - Hsum[i]);
+        c = Hsum[i] + max(Ssum[n] - Ssum[i], Psum[n] - Psum[i]);
+        ans = max(ans, max(a, max(b, c)));
+    }
+    cout << ans;
+}
