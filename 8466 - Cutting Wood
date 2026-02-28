@@ -1,0 +1,36 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+bool Works(long long h, long long k, vector<long long>& logs) {
+    long long numLog = 0;
+    for (long long i : logs) {
+        long long none = 0;
+        numLog += max(none, i - h);
+    }
+    return (numLog >= k);
+}
+
+int main() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    //freopen("1.in", "r", stdin);
+    long long n, k;
+    vector<long long> logs;
+    cin >> n >> k;
+    for (long long i = 0; i < n; ++i) {
+        long long x;
+        cin >> x;
+        logs.push_back(x);
+    }
+    long long maxLog = *max_element(logs.begin(), logs.end());
+    long long i = 1, j = maxLog;
+    while (i <= j) {
+        long long mid = (i + j) / 2;
+        if (Works(mid, k, logs)) {
+            i = mid + 1;
+        } else {
+            j = mid - 1;
+        }
+    }
+    cout << i - 1;
+}
