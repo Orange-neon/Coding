@@ -1,0 +1,35 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+bool Works(double length, double num, vector<double>& ropes) {
+    double numR = 0;
+    for (double i : ropes) {
+        numR += floor(i / length);
+    }
+    return (numR >= num);
+}
+
+int main() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    //freopen("1.in", "r", stdin);
+    double n, num;
+    vector<double> ropes;
+    cin >> n >> num;
+    for (int i = 0; i < n; ++i) {
+        double x;
+        cin >> x;
+        ropes.push_back(x);
+    }
+    double maxSize = *max_element(ropes.begin(), ropes.end());
+    double i = 1, j = maxSize;
+    while (j - i >= 0.005) {
+        double mid = (i + j) / 2;
+        if (Works(mid, num, ropes)) {
+            i = mid;
+        } else {
+            j = mid;
+        }
+    }
+    cout << fixed << setprecision(2) << i;
+}
