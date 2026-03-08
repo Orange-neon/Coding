@@ -1,0 +1,39 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+bool isValid(int mid, vector<int>& barns, int cows) {
+    int curDist = 0;
+    int nCows = 1;
+    for (int i = 1; i < barns.size(); ++i) {
+        curDist += barns[i] - barns[i - 1];
+        if (curDist >= mid) {
+            ++nCows;
+            curDist = 0;
+        } 
+    }
+    return nCows >= cows;
+}
+
+int main() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    freopen("1.in", "r", stdin);
+    int n, m;
+    cin >> n >> m;
+    vector<int> barns(n, 0);
+    for (int &i : barns) {
+        cin >> i;
+    }
+    sort(barns.begin(), barns.end());
+    int i = 1, j = *max_element(barns.begin(), barns.end()), ans = 1;
+    while (i <= j) {
+        int mid = (i + j) / 2;
+        if (isValid(mid, barns, m)) {
+            ans = mid;
+            i = mid + 1;
+        } else {
+            j = mid - 1;
+        }
+    }
+    cout << ans;
+}
