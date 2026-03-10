@@ -1,0 +1,71 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+struct DSU {
+    vector<int> e;
+    DSU(int N) {
+        e = vector<int> (N, -1);
+    }
+
+    int get(int x) {
+        if (e[x] < 0) {
+            return x;
+        }
+        return e[x] = get(e[x]);
+    }
+
+    bool same_set(int a, int b) {
+        return get(a) == get(b);
+    }
+
+    int size(int x) {
+        return -e[get(x)];
+    }
+
+    void unite(int x, int y) {
+        x = get(x);
+        y = get(y);
+        if (x == y) {
+            return;
+        }
+        if (e[x] > e[y]) {
+            swap(x, y);
+        }
+        e[x] += e[y];
+        e[y] = x;
+        return;
+    }
+};
+
+int main() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    //freopen("1.in", "r", stdin);
+    int n, m;
+    cin >> n >> m;
+    DSU dsu(n);
+    int numCluster = n;
+    pair<int, int> maxCluster = {1, 0};
+    for (int i = 0; i < m; ++i) {
+        int a, b;
+        cin >> a >> b;
+        --a;
+        --b;
+        if (dsu.get(a) == dsu.get(b)) {
+            cout << numCluster << " " << maxCluster.first << '\n';
+        } else {
+            dsu.unite(a,b);
+            --numCluster;
+            if (dsu.get(a) == maxCluster.second) {
+                maxCluster.first = dsu.size(dsu.get(a));
+                maxCluster.second = dsu.get(a);
+            } else {
+                if (dsu.size(dsu.get(a)) > maxCluster.first) {
+                    maxCluster.first = dsu.size(dsu.get(a));
+                    maxCluster.second = dsu.get(a);
+                }
+            }
+            cout << numCluster << " " << maxCluster.first << '\n';
+        }
+    } 
+}
