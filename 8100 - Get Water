@@ -1,0 +1,38 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main() {
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    //freopen("1.in", "r", stdin);
+    int n;
+    cin >> n;
+    vector<int> times;
+    set<int> seen;
+    map<int, vector<int>> TimeToID;
+    for (int i = 0; i < n; ++i) {
+        int x;
+        cin >> x;
+        if (!seen.count(x)) {
+            times.push_back(x);
+        }
+        seen.insert(x);
+        TimeToID[x].push_back(i);
+    }
+    sort(times.begin(), times.end());
+    double psum = 0.0;
+    double tsum = 0.0;
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j < TimeToID[times[i]].size(); ++j) {
+            int p = TimeToID[times[i]][j];
+            cout << p + 1<< " ";
+            if (i == 0 && j == 0) {
+                continue;
+            }
+            tsum += times[i + j - 1];
+            psum += tsum;
+        }
+    }
+    cout << '\n';
+    psum /= n;
+    cout << fixed << setprecision(2) << psum;
+}
